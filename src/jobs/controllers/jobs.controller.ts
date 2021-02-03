@@ -1,8 +1,10 @@
+import { AuthorizationGuard } from './../../guards/authorization.guard';
 import { ToIntegerPipe } from './../../pipes/to-integer.pipe';
 import { HttpExceptionFilter } from './../../filters/http.filter';
 import { JobsRepository } from './../repositories/jobs.repository';
-import { Body, Controller, Delete, Get, HttpException, NotFoundException, Param, Post, Put, UseFilters } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, NotFoundException, Param, Post, Put, UseFilters, UseGuards } from '@nestjs/common';
 import { Job } from 'src/interfaces';
+import { AuthenticationGuard } from 'src/guards/auth.guard';
 // import { AppService } from './app.service';
 
 @Controller('job')
@@ -12,6 +14,7 @@ export class JobsController {
 constructor(private jobsDB: JobsRepository ) {}
 
 @Get('get-jobs')
+@UseGuards(AuthenticationGuard)
 async getAllJobs(): Promise<any[]> {
   console.log('Getting all Jobs')
   return this.jobsDB.findAllJobs();    
@@ -49,9 +52,16 @@ async updateJob(
 }
 
 @Delete('delete-job/:jobId')
+@UseGuards(AuthorizationGuard)
 async deleteJob(@Param("jobId") courseId: string):Promise<Job>{
   console.log('Deleting Job')
-  return this.jobsDB.deleteJob(courseId);
+  let job = await this.jobsDB.deleteJob(courseId);
+  console.log(job)
+  if(!job){
+    throw new NotFoundException
+  } else {
+    return job;
+  }
 }
 
 @Post('post-job')
