@@ -8,9 +8,22 @@ import * as mongoose from 'mongoose'
 import { ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
 
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Swagger
+   const config = new DocumentBuilder()
+    .setTitle('Paro Baro v1')
+    .setDescription('ParoBaro API')
+    .setVersion('1.0')
+    .addTag('API')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   app.useGlobalFilters(new HttpExceptionFilter(), new FallbackExceptionFilter(), new ValidationFilter())
   app.useGlobalPipes(new ValidationPipe({
     skipMissingProperties: true,
