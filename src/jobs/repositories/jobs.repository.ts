@@ -12,6 +12,14 @@ export class JobsRepository{
         return this.jobsModel.find();
     }
 
+    async getJobById(jobId: string): Promise<any>{
+        return this.jobsModel.findById(jobId)
+    }
+
+    async getJobByCategory(category: string): Promise<any[]>{
+        return this.jobsModel.find({category: category})
+    }
+
     async updateJob(courseId: string, changes: Partial<Job>):Promise<Job>{
         return this.jobsModel.findOneAndUpdate({_id: courseId}, changes, {new: true})
     }
@@ -22,6 +30,7 @@ export class JobsRepository{
 
     async postNewJob(job: Job): Promise<any[]>{
         const newJob = new this.jobsModel(job)
+        console.log(job)
         await newJob.save();
         return newJob
     }
