@@ -1,3 +1,4 @@
+import { UsersModule } from './users/users.module';
 import { JobsController } from './jobs/controllers/jobs.controller';
 import { GetUserMiddleware } from './middleware/get-user.middleware';
 import { AuthModule } from './auth/auth.module';
@@ -9,7 +10,7 @@ import {MongooseModule} from '@nestjs/mongoose'
 import { MONGODB_URI } from './connection.temporary';
 
 @Module({
-  imports: [JobsModule, AuthModule, MongooseModule.forRoot(MONGODB_URI)],
+  imports: [UsersModule, JobsModule, AuthModule, MongooseModule.forRoot(MONGODB_URI)],
   controllers: [AppController],
   providers: [AppService],
 })

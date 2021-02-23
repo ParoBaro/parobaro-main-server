@@ -11,6 +11,7 @@ export class AuthenticationGuard implements CanActivate{
 
         const user = request['user'];
         
+        //Require JWT
         if(!user){
             console.log('Unauthorized from Guard')    
             throw new UnauthorizedException();

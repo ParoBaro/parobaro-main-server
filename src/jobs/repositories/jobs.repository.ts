@@ -30,6 +30,7 @@ export class JobsRepository{
 
     async postNewJob(job: Job): Promise<any[]>{
         const newJob = new this.jobsModel(job)
+        console.log(job)
         await newJob.save();
         return newJob
     }
